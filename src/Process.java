@@ -1,10 +1,16 @@
 public class Process {
 
     private int cpu_time_remaining, current_cpu_burst_remaining, time_spent_on_cpu,
-    time_spent_on_io, time_spent_in_ready_queue, io_request_count, pid;
+    time_spent_on_io, time_spent_in_ready_queue, io_request_count, pid, time_new_process, cpu_total, cpu_burst;
 
     public Process(int pid){
         this.pid = pid;
+    }
+
+    public Process(int time_new_process, int cpu_total, int cpu_burst) {
+        this.time_new_process = time_new_process;
+        this.cpu_total = cpu_total;
+        this.cpu_burst = cpu_burst;
     }
 
     public int getCpu_time_remaining() {

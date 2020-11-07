@@ -6,13 +6,20 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 public class Main {
 
     // takes one parameter, average value, and returns a random number in an
     // exponential distribution around that expected average value
-    static double expRand ( double expected ) {
-        return -expected * Math.log( Math.random());
+    static int expRand (int expected) {
+        return (int)(-expected * Math.log(Math.random()));
+    }
+
+    static int randomNumber() {
+        Random r = new Random();
+        int rNumber = r.nextInt(100)+1;
+        return rNumber;
     }
 
     // same as above, but I use a bit of arithmetic to round the result to the
@@ -78,14 +85,26 @@ public class Main {
         Event firstEvent = new Event("N", 0);
         eventQueue.push(firstEvent);
 
+        Random r = new Random();
+
         while(timer < total_simulation_time){
             Event e = eventQueue.pop();
             timer = e.getTime();
 
             switch(e.getType()){
                 case "N": // Create a new process
-                    readyQueue.push(new Process(pidGen++));
-
+                    //time when next process will be created
+                    int next_process = expRand(avg_process_creation);
+                    //total CPU time of the process
+                    int total_CPU_time = expRand(avg_process_length);
+                    int randomNumber = randomNumber();
+                    int cpuBurst;
+                    if (randomNumber < percent_io_jobs) {
+                        cpuBurst = r.nextInt(1001)+1000;
+                    } else {
+                        cpuBurst = r.nextInt(10001)+10000;
+                    }
+                    readyQueue.push(new Process(next_process, total_CPU_time, cpuBurst));
                     break;
             }
         }
